@@ -2,15 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-05-27.dahlia' as const,
-})
-
 function usd(n: number) {
   return `$${Math.abs(n).toFixed(2)}`
 }
 
 export async function GET(req: NextRequest) {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 501 })
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+    apiVersion: '2026-05-27.dahlia' as const,
+  })
+
   const sessionId = req.nextUrl.searchParams.get('session_id')
   if (!sessionId) {
     return NextResponse.json({ error: 'Missing session_id' }, { status: 400 })
