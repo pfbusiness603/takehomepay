@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="bg-white border-t border-gray-100 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           <div>
             <p className="font-bold text-gray-900 mb-1">💵 TakeHomePay</p>
             <p className="text-sm text-gray-500">
@@ -32,6 +32,15 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-gray-500">
               <li><Link href="/" className="hover:text-emerald-600 transition-colors">Paycheck Calculator</Link></li>
               <li><Link href="/#generate-stub" className="hover:text-emerald-600 transition-colors">PDF Pay Stub — $4.99</Link></li>
+              <li><Link href="/how-we-calculate" className="hover:text-emerald-600 transition-colors">How We Calculate</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-gray-700 mb-3">Company</p>
+            <ul className="space-y-1 text-sm text-gray-500">
+              <li><Link href="/about" className="hover:text-emerald-600 transition-colors">About</Link></li>
+              <li><Link href="/contact" className="hover:text-emerald-600 transition-colors">Contact</Link></li>
             </ul>
           </div>
         </div>

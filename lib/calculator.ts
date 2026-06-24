@@ -21,19 +21,31 @@ export interface CalculatorInputs {
   preTaxDeductions: {
     retirement401k: number   // per paycheck, pre-tax
     healthInsurance: number  // per paycheck, pre-tax
+    hsa?: number             // per paycheck, pre-tax (Section 125; 2026 limits: $4,300 single / $8,550 family)
+    fsa?: number             // per paycheck, pre-tax (Section 125; 2026 limit: $3,300)
   }
+  additionalWithholding?: number  // per paycheck, W-4 line 4c extra withholding
+}
+
+export interface AdditionalTaxDetail {
+  name: string
+  shortName: string
+  perPaycheck: number
+  annualAmount: number
 }
 
 export interface CalculatorResults {
   // Per paycheck
   grossPay: number
   preTaxDeductionsTotal: number
+  additionalWithholding: number
   federalTaxableIncome: number
   federalTax: number
   stateTax: number
   socialSecurity: number        // W-2 only; 0 for 1099
   medicare: number              // W-2 only; 0 for 1099
   selfEmploymentTax: number     // 1099 only; 0 for W-2
+  additionalTaxesPerPaycheck: number   // SDI, PFML, etc. (W-2 only)
   totalTaxes: number
   netPay: number
   employmentType: EmploymentType
@@ -50,6 +62,7 @@ export interface CalculatorResults {
   annualSocialSecurity: number
   annualMedicare: number
   annualSelfEmploymentTax: number
+  annualAdditionalTaxes: number
   annualNetPay: number
 
   // YTD
@@ -59,6 +72,9 @@ export interface CalculatorResults {
   ytdSocialSecurity: number
   ytdMedicare: number
   ytdNet: number
+
+  // Additional state payroll taxes (SDI, PFML, etc.)
+  additionalTaxDetails: AdditionalTaxDetail[]
 
   stateName: string
 }
@@ -79,9 +95,15 @@ export function calculate(inputs: CalculatorInputs): CalculatorResults {
   const { grossPay, payFrequency, filingStatus, state, allowances, employmentType, preTaxDeductions } = inputs
   const periods = PAY_FREQUENCIES[payFrequency].periodsPerYear
   const is1099 = employmentType === '1099'
+  const extraWithholding = inputs.additionalWithholding ?? 0
 
   const annualGross = grossPay * periods
-  const annualPreTax = (preTaxDeductions.retirement401k + preTaxDeductions.healthInsurance) * periods
+  const annualPreTax = (
+    preTaxDeductions.retirement401k +
+    preTaxDeductions.healthInsurance +
+    (preTaxDeductions.hsa ?? 0) +
+    (preTaxDeductions.fsa ?? 0)
+  ) * periods
   const annualFicaBase = Math.max(0, annualGross - preTaxDeductions.retirement401k * periods)
 
   // ── Self-employment tax (1099) ──────────────────────────────────────────────
@@ -135,33 +157,70 @@ export function calculate(inputs: CalculatorInputs): CalculatorResults {
   const annualStateTaxable = Math.max(0, annualGross - annualPreTax - stateStdDed - stateExemption)
   const annualStateTax = applyBrackets(annualStateTaxable, stateConfig.brackets[filingStatus])
 
-  // ── Per-paycheck conversion ──────────────────────────────────────────────────
-  const federalTax       = annualFederalTax / periods
-  const stateTax         = annualStateTax / periods
-  const socialSecurity   = annualSS / periods
-  const medicare         = annualTotalMedicare / periods
-  const selfEmploymentTax = annualSelfEmploymentTax / periods
-  const preTaxTotal      = preTaxDeductions.retirement401k + preTaxDeductions.healthInsurance
+  // ── Additional state payroll taxes (SDI, PFML, TDI, etc.) — W-2 only ────────
+  const additionalTaxDetails: AdditionalTaxDetail[] = []
+  let annualAdditionalTaxes = 0
 
-  const totalTaxes = federalTax + stateTax + socialSecurity + medicare + selfEmploymentTax
+  if (!is1099) {
+    for (const tax of stateConfig.additionalTaxes ?? []) {
+      let annualAmount = 0
+
+      if (tax.weeklyFlatAmount !== undefined) {
+        // NY SDI: flat $0.60/week regardless of wages
+        annualAmount = tax.weeklyFlatAmount * 52
+      } else if (tax.weeklyRateCap !== undefined && tax.rate !== undefined) {
+        // HI TDI: rate × weekly wages, capped at $6.87/week
+        const weeklyGross = annualFicaBase / 52
+        const weeklyTax = Math.min(weeklyGross * tax.rate, tax.weeklyRateCap)
+        annualAmount = weeklyTax * 52
+      } else if (tax.rate !== undefined) {
+        const taxableWages = tax.wageCap ? Math.min(annualFicaBase, tax.wageCap) : annualFicaBase
+        annualAmount = taxableWages * tax.rate
+      }
+
+      additionalTaxDetails.push({
+        name: tax.name,
+        shortName: tax.shortName,
+        perPaycheck: annualAmount / periods,
+        annualAmount,
+      })
+      annualAdditionalTaxes += annualAmount
+    }
+  }
+
+  // ── Per-paycheck conversion ──────────────────────────────────────────────────
+  const federalTax            = annualFederalTax / periods
+  const stateTax              = annualStateTax / periods
+  const socialSecurity        = annualSS / periods
+  const medicare              = annualTotalMedicare / periods
+  const selfEmploymentTax     = annualSelfEmploymentTax / periods
+  const additionalTaxesPerPaycheck = annualAdditionalTaxes / periods
+  const preTaxTotal           = preTaxDeductions.retirement401k + preTaxDeductions.healthInsurance +
+    (preTaxDeductions.hsa ?? 0) + (preTaxDeductions.fsa ?? 0)
+
+  const totalTaxes = federalTax + stateTax + socialSecurity + medicare + selfEmploymentTax + additionalTaxesPerPaycheck + extraWithholding
   const netPay = grossPay - preTaxTotal - totalTaxes
 
   const totalFica = annualSS + annualTotalMedicare + annualSelfEmploymentTax
   const effectiveFederalRate = annualGross > 0 ? annualFederalTax / annualGross : 0
   const effectiveStateRate   = annualGross > 0 ? annualStateTax / annualGross : 0
-  const effectiveTotalRate   = annualGross > 0 ? (annualFederalTax + annualStateTax + totalFica) / annualGross : 0
+  const effectiveTotalRate   = annualGross > 0
+    ? (annualFederalTax + annualStateTax + totalFica + annualAdditionalTaxes) / annualGross
+    : 0
 
-  const annualNetPay = annualGross - annualPreTax - annualFederalTax - annualStateTax - totalFica
+  const annualNetPay = annualGross - annualPreTax - annualFederalTax - annualStateTax - totalFica - annualAdditionalTaxes - extraWithholding * periods
 
   return {
     grossPay,
     preTaxDeductionsTotal: preTaxTotal,
+    additionalWithholding: extraWithholding,
     federalTaxableIncome: annualFederalTaxable,
     federalTax,
     stateTax,
     socialSecurity,
     medicare,
     selfEmploymentTax,
+    additionalTaxesPerPaycheck,
     totalTaxes,
     netPay,
     employmentType,
@@ -174,6 +233,7 @@ export function calculate(inputs: CalculatorInputs): CalculatorResults {
     annualSocialSecurity: annualSS,
     annualMedicare: annualTotalMedicare,
     annualSelfEmploymentTax,
+    annualAdditionalTaxes,
     annualNetPay,
     ytdGross: annualGross,
     ytdFederal: annualFederalTax,
@@ -181,6 +241,7 @@ export function calculate(inputs: CalculatorInputs): CalculatorResults {
     ytdSocialSecurity: annualSS,
     ytdMedicare: annualTotalMedicare,
     ytdNet: annualNetPay,
+    additionalTaxDetails,
     stateName: stateConfig.name,
   }
 }

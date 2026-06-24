@@ -46,6 +46,22 @@ export default function MobileNav() {
               </div>
 
               <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Tools</p>
+                <ul className="space-y-2">
+                  <li>
+                    <Link href="/calculator/1099-vs-w2" onClick={() => setOpen(false)} className="block text-sm text-gray-700 hover:text-emerald-600 py-1 transition-colors">
+                      1099 vs W-2 Calculator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/compare/california-vs-texas" onClick={() => setOpen(false)} className="block text-sm text-gray-700 hover:text-emerald-600 py-1 transition-colors">
+                      Compare States
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Popular States</p>
                 <ul className="space-y-2">
                   {popular.map((s) => (

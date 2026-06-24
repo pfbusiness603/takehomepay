@@ -7,6 +7,16 @@ export interface TaxBracket {
   rate: number
 }
 
+// Additional payroll taxes beyond income tax (SDI, PFML, TDI, etc.)
+export interface AdditionalPayrollTax {
+  name: string             // Full display name: "California SDI"
+  shortName: string        // Abbreviated: "SDI"
+  rate?: number            // Annual rate (e.g., 0.011 for 1.1%)
+  wageCap?: number         // Annual wage cap (e.g., 87_000 for RI TDI)
+  weeklyFlatAmount?: number  // Fixed weekly deduction (NY SDI: $0.60/week)
+  weeklyRateCap?: number   // Max weekly deduction via rate (HI TDI: $6.87/week)
+}
+
 export interface StateTaxConfig {
   name: string
   code: string
@@ -22,6 +32,7 @@ export interface StateTaxConfig {
     single: number
     married: number
   }
+  additionalTaxes?: AdditionalPayrollTax[]
 }
 
 // ─── Federal ─────────────────────────────────────────────────────────────────
@@ -156,12 +167,20 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: { single: 5_540, married: 11_080 },
     personalExemption: { single: 144,   married: 288 },
+    additionalTaxes: [
+      // SDI rate: 1.1% as of 2024, no wage cap (removed cap — source: EDD 2024)
+      { name: 'California SDI', shortName: 'SDI', rate: 0.011 },
+    ],
   },
   CO: {
     name: 'Colorado', code: 'CO',
     brackets: flat(0.044),
     standardDeduction: { single: 15_000, married: 30_000 }, // mirrors federal
     personalExemption: NO_EXEMPTION,
+    additionalTaxes: [
+      // FAMLI: employee pays 50% of 0.9% — source: CDLE 2026
+      { name: 'CO FAMLI', shortName: 'FAMLI', rate: 0.0045, wageCap: 176_100 },
+    ],
   },
   CT: {
     name: 'Connecticut', code: 'CT',
@@ -187,6 +206,10 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: NO_DEDUCTION,
     personalExemption: { single: 15_000, married: 24_000 },
+    additionalTaxes: [
+      // PFML: 0.5% up to SS wage base — source: CT PFML Authority 2026
+      { name: 'CT Paid Family Leave', shortName: 'PFML', rate: 0.005, wageCap: 176_100 },
+    ],
   },
   DE: {
     name: 'Delaware', code: 'DE',
@@ -259,6 +282,10 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: { single: 2_200, married: 4_400 },
     personalExemption: { single: 1_144, married: 2_288 },
+    additionalTaxes: [
+      // TDI: 0.5% of weekly wages, max $6.87/week — source: Hawaii DLIR 2026
+      { name: 'Hawaii TDI', shortName: 'TDI', rate: 0.005, weeklyRateCap: 6.87 },
+    ],
   },
   ID: {
     name: 'Idaho', code: 'ID',
@@ -373,6 +400,10 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     brackets: flat(0.05),
     standardDeduction: NO_DEDUCTION,
     personalExemption: { single: 4_400, married: 8_800 },
+    additionalTaxes: [
+      // PFML: employee share ~0.46% up to SS wage base — source: MA DFML 2026
+      { name: 'MA Paid Family Leave', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
+    ],
   },
   MI: {
     name: 'Michigan', code: 'MI',
@@ -505,6 +536,14 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: NO_DEDUCTION,
     personalExemption: { single: 1_000, married: 2_000 },
+    additionalTaxes: [
+      // SDI: 0.14% up to $161,400 — source: NJ Division of Taxation 2026
+      { name: 'NJ SDI', shortName: 'SDI', rate: 0.0014, wageCap: 161_400 },
+      // FLI: 0.09% up to $161,400 — source: NJ DOL 2026
+      { name: 'NJ Family Leave', shortName: 'FLI', rate: 0.0009, wageCap: 161_400 },
+      // UI: employee contribution 0.425% up to $43,300 — source: NJ DOL 2026
+      { name: 'NJ Unemployment', shortName: 'UI', rate: 0.00425, wageCap: 43_300 },
+    ],
   },
   NM: {
     name: 'New Mexico', code: 'NM',
@@ -550,6 +589,12 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: { single: 8_000, married: 16_050 },
     personalExemption: NO_EXEMPTION,
+    additionalTaxes: [
+      // PFML: 0.373% up to $89,343 — source: NY WCB 2026
+      { name: 'NY Paid Family Leave', shortName: 'PFL', rate: 0.00373, wageCap: 89_343 },
+      // SDI: $0.60/week flat (very small) — source: NY WCB 2026
+      { name: 'NY SDI', shortName: 'SDI', weeklyFlatAmount: 0.60 },
+    ],
   },
   NC: {
     name: 'North Carolina', code: 'NC',
@@ -634,6 +679,10 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: { single: 2_420, married: 4_840 },
     personalExemption: { single: 236, married: 472 },
+    additionalTaxes: [
+      // Paid Leave Oregon: employee pays 60% of 1% = 0.6% up to SS cap — source: OED 2026
+      { name: 'Oregon Paid Leave', shortName: 'PFML', rate: 0.006, wageCap: 176_100 },
+    ],
   },
   PA: {
     name: 'Pennsylvania', code: 'PA',
@@ -657,6 +706,10 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     },
     standardDeduction: { single: 9_750, married: 19_500 },
     personalExemption: { single: 4_900, married: 9_800 },
+    additionalTaxes: [
+      // TDI: 1.1% up to $87,000 — source: RI DLT 2026
+      { name: 'Rhode Island TDI', shortName: 'TDI', rate: 0.011, wageCap: 87_000 },
+    ],
   },
   SC: {
     name: 'South Carolina', code: 'SC',
@@ -742,6 +795,12 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     brackets: NO_TAX,
     standardDeduction: NO_DEDUCTION,
     personalExemption: NO_EXEMPTION,
+    additionalTaxes: [
+      // PFML: 0.46% up to SS wage base — source: WA ESD 2026
+      { name: 'WA PFML', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
+      // WA Cares Fund (long-term care): 0.58%, no wage cap — source: WA DCYF 2026
+      { name: 'WA Cares Fund', shortName: 'WA Cares', rate: 0.0058 },
+    ],
   },
   WV: {
     name: 'West Virginia', code: 'WV',

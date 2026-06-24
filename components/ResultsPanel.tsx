@@ -129,6 +129,12 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
             {inputs.preTaxDeductions.healthInsurance > 0 && (
               <Row sub label="Health Insurance" value={`−${formatCurrency(inputs.preTaxDeductions.healthInsurance * mult)}`} />
             )}
+            {(inputs.preTaxDeductions.hsa ?? 0) > 0 && (
+              <Row sub label="HSA" value={`−${formatCurrency((inputs.preTaxDeductions.hsa ?? 0) * mult)}`} />
+            )}
+            {(inputs.preTaxDeductions.fsa ?? 0) > 0 && (
+              <Row sub label="FSA" value={`−${formatCurrency((inputs.preTaxDeductions.fsa ?? 0) * mult)}`} />
+            )}
           </>
         )}
         <Row label="Federal Income Tax" value={`−${formatCurrency(federal)}`} />
@@ -139,6 +145,19 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
           <>
             <Row label="Social Security (6.2%)" value={`−${formatCurrency(ss)}`} />
             <Row label="Medicare (1.45%)" value={`−${formatCurrency(medicare)}`} />
+            {results.additionalTaxDetails.map((tax) => (
+              <Row
+                key={tax.name}
+                label={`${tax.name}`}
+                value={`−${formatCurrency(isPaycheck ? tax.perPaycheck : tax.annualAmount)}`}
+              />
+            ))}
+            {results.additionalWithholding > 0 && (
+              <Row
+                label="Extra Withholding (W-4)"
+                value={`−${formatCurrency(isPaycheck ? results.additionalWithholding : results.additionalWithholding * periods)}`}
+              />
+            )}
           </>
         )}
         <Row label="Take-Home Pay" value={formatCurrency(net)} highlight />

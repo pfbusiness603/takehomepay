@@ -29,16 +29,16 @@ const FAQS = [
   },
   {
     q: 'What does the PDF pay stub include?',
-    a: 'Your generated pay stub includes employer name, employee name, pay period dates, itemized earnings, all tax deductions, pre-tax benefit deductions, net pay, and year-to-date totals â€” for just $4.99 via secure Stripe checkout. For personal record-keeping purposes only.',
+    a: 'Your generated pay stub includes employer name, employee name, pay period dates, itemized earnings, all tax deductions, pre-tax benefit deductions, net pay, and year-to-date totals — for just $4.99 via secure Stripe checkout. For personal record-keeping purposes only.',
   },
 ]
 
 export const metadata: Metadata = {
-  title: 'Free Paycheck Calculator 2026 â€” All 50 States',
+  title: 'Free Paycheck Calculator 2026 — All 50 States',
   description:
     'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states. Generate a professional PDF pay stub for just $4.99.',
   openGraph: {
-    title: 'Free Paycheck Calculator 2026 â€” All 50 States',
+    title: 'Free Paycheck Calculator 2026 — All 50 States',
     description: 'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states.',
     type: 'website',
     url: SITE_URL,
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Paycheck Calculator 2026 â€” All 50 States',
+    title: 'Free Paycheck Calculator 2026 — All 50 States',
     description: 'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states.',
   },
 }
@@ -69,7 +69,7 @@ export default function HomePage() {
             <span className="text-emerald-600">Real Take-Home Pay?</span>
           </h1>
           <p className="mt-4 text-lg text-gray-500">
-            Free paycheck calculator for all 50 states. Instantly see your net pay after federal tax, state tax, Social Security, and Medicare â€” updated for 2026.
+            Free paycheck calculator for all 50 states. Instantly see your net pay after federal tax, state tax, Social Security, and Medicare — updated for 2026.
           </p>
         </div>
 
@@ -81,7 +81,7 @@ export default function HomePage() {
             </Suspense>
           </div>
 
-          {/* Sidebar â€” desktop only, non-intrusive */}
+          {/* Sidebar — desktop only, non-intrusive */}
           <aside className="hidden lg:block space-y-6">
             <div className="sticky top-24 space-y-6">
               {/* Sidebar ad */}
@@ -101,7 +101,7 @@ export default function HomePage() {
                         href={`/calculator/${s.slug}`}
                         className="text-sm text-gray-600 hover:text-emerald-600 transition-colors flex items-center gap-1.5"
                       >
-                        <span className="text-gray-300">â†’</span>
+                        <span className="text-gray-300">→</span>
                         {s.name}
                       </Link>
                     </li>
@@ -112,9 +112,9 @@ export default function HomePage() {
               {/* PDF CTA card */}
               <div className="bg-indigo-600 rounded-2xl p-5 text-white text-center">
                 <p className="font-bold text-lg">PDF Pay Stub</p>
-                <p className="text-sm opacity-80 mt-1">Professional format Â· YTD totals</p>
+                <p className="text-sm opacity-80 mt-1">Professional format · YTD totals</p>
                 <p className="text-3xl font-bold mt-3">$4.99</p>
-                <p className="text-xs opacity-60 mt-1">One-time Â· Instant download</p>
+                <p className="text-xs opacity-60 mt-1">One-time · Instant download</p>
               </div>
             </div>
           </aside>
@@ -128,12 +128,12 @@ export default function HomePage() {
               Enter your gross (pre-tax) pay per paycheck and select your pay frequency, filing status, and state. The calculator applies the <strong>2026 federal income tax brackets</strong>, your state&apos;s tax rates, FICA (Social Security 6.2% + Medicare 1.45%), and any pre-tax deductions like 401(k) contributions or health insurance premiums.
             </p>
             <p>
-              The result is your <strong>actual net take-home pay</strong> â€” what gets deposited into your bank account each pay period.
+              The result is your <strong>actual net take-home pay</strong> — what gets deposited into your bank account each pay period.
             </p>
           </div>
         </section>
 
-        {/* FAQ â€” reuses FAQS constant defined at top (also used for JSON-LD) */}
+        {/* FAQ — reuses FAQS constant defined at top (also used for JSON-LD) */}
         <section className="mt-12 max-w-3xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
           <dl className="space-y-6">

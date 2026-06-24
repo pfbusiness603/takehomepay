@@ -21,7 +21,8 @@ const DEFAULT_INPUTS: CalculatorInputs = {
   state: 'TX',
   allowances: 0,
   employmentType: 'w2',
-  preTaxDeductions: { retirement401k: 0, healthInsurance: 0 },
+  preTaxDeductions: { retirement401k: 0, healthInsurance: 0, hsa: 0, fsa: 0 },
+  additionalWithholding: 0,
 }
 
 type PayType = 'salary' | 'hourly'
@@ -58,12 +59,19 @@ function parseSearchParams(
 
   const k401 = sp.get('k401')
   const health = sp.get('health')
-  if (k401 || health) {
+  const hsa = sp.get('hsa')
+  const fsa = sp.get('fsa')
+  if (k401 || health || hsa || fsa) {
     out.preTaxDeductions = {
       retirement401k: k401 ? parseFloat(k401) : 0,
       healthInsurance: health ? parseFloat(health) : 0,
+      hsa: hsa ? parseFloat(hsa) : 0,
+      fsa: fsa ? parseFloat(fsa) : 0,
     }
   }
+
+  const addl = sp.get('addl')
+  if (addl) out.additionalWithholding = parseFloat(addl)
 
   const hourly = sp.get('hourly')
   if (hourly) out.hourlyRate = parseFloat(hourly)
@@ -142,7 +150,7 @@ export default function Calculator({ defaultState, defaultGross, jobLabel }: Cal
     }
   }
 
-  function setDeduction(key: 'retirement401k' | 'healthInsurance', value: number) {
+  function setDeduction(key: 'retirement401k' | 'healthInsurance' | 'hsa' | 'fsa', value: number) {
     setInputs((prev) => ({
       ...prev,
       preTaxDeductions: { ...prev.preTaxDeductions, [key]: value },
@@ -163,13 +171,18 @@ export default function Calculator({ defaultState, defaultGross, jobLabel }: Cal
     params.set('emp', inputs.employmentType)
     if (inputs.preTaxDeductions.retirement401k) params.set('k401', inputs.preTaxDeductions.retirement401k.toString())
     if (inputs.preTaxDeductions.healthInsurance) params.set('health', inputs.preTaxDeductions.healthInsurance.toString())
+    if (inputs.preTaxDeductions.hsa) params.set('hsa', inputs.preTaxDeductions.hsa.toString())
+    if (inputs.preTaxDeductions.fsa) params.set('fsa', inputs.preTaxDeductions.fsa.toString())
+    if (inputs.additionalWithholding) params.set('addl', inputs.additionalWithholding.toString())
     return `${window.location.origin}${pathname}?${params.toString()}`
   }
 
   const inputBase = 'w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900'
   const selectBase = `${inputBase} bg-white`
 
-  const hasDeductions = inputs.preTaxDeductions.retirement401k > 0 || inputs.preTaxDeductions.healthInsurance > 0
+  const hasDeductions = inputs.preTaxDeductions.retirement401k > 0 || inputs.preTaxDeductions.healthInsurance > 0 ||
+    (inputs.preTaxDeductions.hsa ?? 0) > 0 || (inputs.preTaxDeductions.fsa ?? 0) > 0 ||
+    (inputs.additionalWithholding ?? 0) > 0
 
   return (
     <div className="space-y-4">
@@ -341,35 +354,85 @@ export default function Calculator({ defaultState, defaultGross, jobLabel }: Cal
         </button>
 
         {showAdvanced && (
-          <div className="grid grid-cols-2 gap-3 pt-1">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">
-                {inputs.employmentType === '1099' ? 'SEP-IRA / Solo 401(k)' : '401(k) / Retirement'}
-              </label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
-                <input
-                  type="number" min="0" step="0.01"
-                  value={inputs.preTaxDeductions.retirement401k}
-                  onChange={(e) => setDeduction('retirement401k', parseFloat(e.target.value) || 0)}
-                  className={`${inputBase} pl-7 text-sm`}
-                  placeholder="0.00"
-                />
+          <div className="space-y-3 pt-1">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">
+                  {inputs.employmentType === '1099' ? 'SEP-IRA / Solo 401(k)' : '401(k) / Retirement'}
+                </label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
+                  <input
+                    type="number" min="0" step="0.01"
+                    value={inputs.preTaxDeductions.retirement401k}
+                    onChange={(e) => setDeduction('retirement401k', parseFloat(e.target.value) || 0)}
+                    className={`${inputBase} pl-7 text-sm`}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Health Insurance</label>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
+                  <input
+                    type="number" min="0" step="0.01"
+                    value={inputs.preTaxDeductions.healthInsurance}
+                    onChange={(e) => setDeduction('healthInsurance', parseFloat(e.target.value) || 0)}
+                    className={`${inputBase} pl-7 text-sm`}
+                    placeholder="0.00"
+                  />
+                </div>
               </div>
             </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Health Insurance</label>
-              <div className="relative">
-                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
-                <input
-                  type="number" min="0" step="0.01"
-                  value={inputs.preTaxDeductions.healthInsurance}
-                  onChange={(e) => setDeduction('healthInsurance', parseFloat(e.target.value) || 0)}
-                  className={`${inputBase} pl-7 text-sm`}
-                  placeholder="0.00"
-                />
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">HSA Contribution</label>
+                <p className="text-xs text-gray-400 mb-1">2026 limit: $4,300 single / $8,550 family</p>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
+                  <input
+                    type="number" min="0" step="0.01"
+                    value={inputs.preTaxDeductions.hsa ?? 0}
+                    onChange={(e) => setDeduction('hsa', parseFloat(e.target.value) || 0)}
+                    className={`${inputBase} pl-7 text-sm`}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">FSA Contribution</label>
+                <p className="text-xs text-gray-400 mb-1">2026 limit: $3,300/yr</p>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
+                  <input
+                    type="number" min="0" step="0.01"
+                    value={inputs.preTaxDeductions.fsa ?? 0}
+                    onChange={(e) => setDeduction('fsa', parseFloat(e.target.value) || 0)}
+                    className={`${inputBase} pl-7 text-sm`}
+                    placeholder="0.00"
+                  />
+                </div>
               </div>
             </div>
+
+            {inputs.employmentType === 'w2' && (
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Extra Withholding (W-4 line 4c)</label>
+                <p className="text-xs text-gray-400 mb-1">Additional amount withheld per paycheck — does not reduce taxable income</p>
+                <div className="relative">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 text-sm">$</span>
+                  <input
+                    type="number" min="0" step="0.01"
+                    value={inputs.additionalWithholding ?? 0}
+                    onChange={(e) => setField('additionalWithholding', parseFloat(e.target.value) || 0)}
+                    className={`${inputBase} pl-7 text-sm`}
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
