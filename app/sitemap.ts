@@ -1,8 +1,8 @@
-import { MetadataRoute } from 'next'
+﻿import { MetadataRoute } from 'next'
 import { STATES } from '@/lib/states'
 import { JOB_TYPES } from '@/lib/job-types'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepay.app'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [
@@ -28,3 +28,4 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return entries
 }
+

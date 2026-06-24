@@ -59,7 +59,7 @@ export default function Image({ params }: { params: { state: string; jobtype: st
         {/* Footer */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ fontSize: 22, color: 'rgba(255,255,255,0.6)', fontWeight: 500 }}>
-            takehomepay.app
+            takehomepaycalculator.dev
           </div>
           <div style={{
             backgroundColor: 'rgba(255,255,255,0.15)',

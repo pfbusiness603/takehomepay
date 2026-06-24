@@ -10,7 +10,7 @@ import { STATES, stateBySlug } from '@/lib/states'
 import { JOB_TYPES, jobBySlug } from '@/lib/job-types'
 import Link from 'next/link'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepay.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
 
 interface Props {
   params: { state: string; jobtype: string }

@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
+﻿import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepay.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
 
 export async function POST(req: Request) {
   if (!process.env.RESEND_API_KEY) {
@@ -75,3 +75,4 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: true })
 }
+

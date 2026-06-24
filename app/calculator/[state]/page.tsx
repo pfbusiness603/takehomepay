@@ -11,7 +11,7 @@ import { JOB_TYPES } from '@/lib/job-types'
 import { STATE_TAX_CONFIGS } from '@/lib/tax-config'
 import Link from 'next/link'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepay.app'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
 
 interface Props {
   params: { state: string }
