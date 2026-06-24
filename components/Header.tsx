@@ -15,7 +15,7 @@ export default function Header() {
           <Link href="/" className="hover:text-emerald-600 transition-colors">Calculator</Link>
           <Link href="/calculator/california" className="hover:text-emerald-600 transition-colors">By State</Link>
           <a
-            href="#generate-stub"
+            href="/#generate-stub"
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             PDF Pay Stub — $4.99
