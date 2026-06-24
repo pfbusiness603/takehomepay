@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: '%s | TakeHomePay',
   },
   description:
-    'Free paycheck calculator for all 50 states. See your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Generate a professional PDF pay stub for $2.99.',
+    'Free paycheck calculator for all 50 states. See your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Generate a professional PDF pay stub for $4.99.',
   keywords: ['paycheck calculator', 'take home pay', 'salary calculator', 'pay stub generator', 'net pay calculator'],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepay.app'),
   openGraph: {
