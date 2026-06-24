@@ -59,19 +59,36 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
     Math.abs(results.effectiveFederalRate - results.effectiveTotalRate * 0.6) > 0.05
 
   return (
-    <div className="space-y-4">
-      {/* Net Pay Hero */}
-      <div className="bg-emerald-600 rounded-2xl p-6 text-white text-center">
+    <div className="space-y-4" id="generate-stub">
+
+      {/* Net Pay Hero — CTA lives here at peak attention */}
+      <div className="bg-emerald-600 rounded-2xl p-6 text-white">
         <p className="text-sm font-medium opacity-80 mb-1">
           {isPaycheck ? `${freq} Take-Home Pay` : 'Annual Take-Home Pay'}
         </p>
         <p className="text-5xl font-bold tracking-tight">{formatCurrency(net)}</p>
-        <p className="text-sm opacity-70 mt-2">
+        <p className="text-sm opacity-70 mt-1.5">
           {is1099 ? 'Self-employed · ' : ''}Effective tax rate: {formatPercent(results.effectiveTotalRate)}
         </p>
+
+        {/* PDF CTA — right at the emotional peak */}
+        <div className="mt-5 pt-4 border-t border-white/20 flex flex-col sm:flex-row sm:items-center gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-white">Need an official pay stub?</p>
+            <p className="text-xs text-white/70 mt-0.5">PDF with earnings breakdown, employer info &amp; YTD totals</p>
+          </div>
+          <button
+            onClick={() => setShowStubForm(true)}
+            className="shrink-0 bg-white text-emerald-700 hover:bg-emerald-50 font-bold px-5 py-2.5 rounded-xl transition-colors text-sm whitespace-nowrap shadow-sm"
+          >
+            Generate Pay Stub — $4.99
+          </button>
+        </div>
+
+        {/* Share link — small, below CTA */}
         <button
           onClick={handleShare}
-          className="mt-3 inline-flex items-center gap-1.5 text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full transition-colors"
+          className="mt-3 inline-flex items-center gap-1.5 text-xs text-white/60 hover:text-white/90 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -141,6 +158,13 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
         ))}
       </div>
 
+      {/* AdSense — between rate cards and tips */}
+      <AdUnit
+        slot="1234567890"
+        format="auto"
+        className="rounded-xl bg-gray-50 border border-dashed border-gray-200 min-h-[90px]"
+      />
+
       {/* W-4 withholding tip (dismissible) */}
       {showW4Tip && (
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
@@ -154,29 +178,6 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
         </div>
       )}
 
-      {/* AdSense — below results, non-intrusive */}
-      <AdUnit
-        slot="1234567890"
-        format="auto"
-        className="rounded-xl bg-gray-50 border border-dashed border-gray-200 min-h-[90px]"
-      />
-
-      {/* Pay stub CTA */}
-      <div className="bg-gradient-to-r from-indigo-50 to-emerald-50 border border-indigo-100 rounded-2xl p-5" id="generate-stub">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <p className="font-semibold text-gray-900">Generate a Professional Pay Stub</p>
-            <p className="text-sm text-gray-500 mt-0.5">PDF with employer info, earnings breakdown & YTD totals</p>
-          </div>
-          <button
-            onClick={() => setShowStubForm(true)}
-            className="shrink-0 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-3 rounded-xl transition-colors text-sm whitespace-nowrap"
-          >
-            Generate PDF — $4.99
-          </button>
-        </div>
-      </div>
-
       {/* State comparison — collapsed by default */}
       <StateCompare
         grossPay={inputs.grossPay}
@@ -184,10 +185,9 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
         filingStatus={inputs.filingStatus}
       />
 
-      {/* Disclaimer */}
       <p className="text-xs text-gray-400 leading-relaxed text-center px-2">
-        Results are estimates based on 2026 tax rates and the information you provided. Actual withholding may vary based on your W-4 elections, additional income, or employer-specific deductions.{' '}
-        <strong>This is not tax or financial advice.</strong> Consult a tax professional for guidance specific to your situation.
+        Results are estimates based on 2026 tax rates. Actual withholding may vary.{' '}
+        <strong>Not tax or financial advice.</strong>
       </p>
 
       {showStubForm && (
