@@ -288,7 +288,7 @@ export default function StateCalculatorPage({ params }: Props) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2">
             <Suspense fallback={<div className="bg-white rounded-2xl border border-gray-100 p-6 h-96 animate-pulse" />}>
-              <Calculator defaultState={st.code} />
+              <Calculator defaultState={st.code} hideStateSelector />
             </Suspense>
           </div>
 

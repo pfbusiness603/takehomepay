@@ -12,6 +12,7 @@ interface CalculatorProps {
   defaultState?: string
   defaultGross?: number
   jobLabel?: string
+  hideStateSelector?: boolean
 }
 
 const DEFAULT_INPUTS: CalculatorInputs = {
@@ -82,7 +83,7 @@ function parseSearchParams(
   return out
 }
 
-export default function Calculator({ defaultState, defaultGross, jobLabel }: CalculatorProps) {
+export default function Calculator({ defaultState, defaultGross, jobLabel, hideStateSelector }: CalculatorProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
 
@@ -286,6 +287,7 @@ export default function Calculator({ defaultState, defaultGross, jobLabel }: Cal
 
         {/* State + Filing Status */}
         <div className="grid grid-cols-2 gap-3">
+          {!hideStateSelector && (
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wide">State</label>
             <select
@@ -298,6 +300,7 @@ export default function Calculator({ defaultState, defaultGross, jobLabel }: Cal
               ))}
             </select>
           </div>
+          )}
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wide">Filing Status</label>
             <select

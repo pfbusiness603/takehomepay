@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { STATES } from '@/lib/states'
+import StateSwitcher from '@/components/StateSwitcher'
 
 export const metadata: Metadata = {
   title: 'Paycheck Calculator by State | TakeHomePay',
@@ -18,6 +19,9 @@ export default function StatesPage() {
           <div className="text-center mb-10">
             <h1 className="text-3xl font-bold text-gray-900 mb-3">Paycheck Calculator by State</h1>
             <p className="text-gray-600 text-lg">Select your state to calculate your exact take-home pay including all state and federal taxes.</p>
+            <div className="flex justify-center mt-4">
+              <StateSwitcher label="Jump to:" />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
