@@ -1,9 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function StickyMobileCta() {
   const [visible, setVisible] = useState(false)
+  const pathname = usePathname()
+  const showOnThisPage = pathname === '/' || pathname === '/calculator/1099-vs-w2'
 
   useEffect(() => {
     function onScroll() {
@@ -13,7 +16,7 @@ export default function StickyMobileCta() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  if (!visible) return null
+  if (!visible || !showOnThisPage) return null
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden px-4 pb-4 pt-2 bg-white/90 backdrop-blur-sm border-t border-gray-100 shadow-lg">

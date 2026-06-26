@@ -39,6 +39,8 @@ export async function generateStaticParams() {
   return COMPARISON_PAIRS.map((slug) => ({ slug }))
 }
 
+export const dynamicParams = true
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pair = parsePair(params.slug)
   if (!pair) return {}

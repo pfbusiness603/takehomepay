@@ -1,0 +1,116 @@
+﻿ce67c8e feat: add /states directory page and fix By State nav link
+
+=== STAT ===
+ app/states/page.tsx      | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ components/Header.tsx    |  2 +-
+ components/MobileNav.tsx |  5 +++++
+ 3 files changed, 50 insertions(+), 1 deletion(-)
+
+=== DIFF ===
+diff --git a/app/states/page.tsx b/app/states/page.tsx
+new file mode 100644
+index 0000000..a3c4876
+--- /dev/null
++++ b/app/states/page.tsx
+@@ -0,0 +1,44 @@
++import type { Metadata } from 'next'
++import Link from 'next/link'
++import Header from '@/components/Header'
++import Footer from '@/components/Footer'
++import { STATES } from '@/lib/states'
++
++export const metadata: Metadata = {
++  title: 'Paycheck Calculator by State | TakeHomePay',
++  description: 'Calculate your take-home pay for all 50 states. Select your state for a detailed paycheck breakdown including federal and state taxes.',
++}
++
++export default function StatesPage() {
++  return (
++    <>
++      <Header />
++      <main className="min-h-screen bg-gray-50">
++        <div className="max-w-5xl mx-auto px-4 py-12">
++          <div className="text-center mb-10">
++            <h1 className="text-3xl font-bold text-gray-900 mb-3">Paycheck Calculator by State</h1>
++            <p className="text-gray-600 text-lg">Select your state to calculate your exact take-home pay including all state and federal taxes.</p>
++          </div>
++
++          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
++            {STATES.map((state) => (
++              <Link
++                key={state.code}
++                href={`/calculator/${state.slug}`}
++                className="flex flex-col items-center justify-center p-4 bg-white rounded-xl border border-gray-200 hover:border-emerald-400 hover:bg-emerald-50 hover:shadow-sm transition-all group"
++              >
++                <span className="text-xs font-bold text-gray-400 group-hover:text-emerald-600 mb-1">{state.code}</span>
++                <span className="text-sm font-medium text-gray-800 group-hover:text-emerald-700 text-center leading-tight">{state.name}</span>
++              </Link>
++            ))}
++          </div>
++
++          <div className="mt-12 text-center">
++            <p className="text-gray-500 text-sm">All calculations use 2026 federal and state tax rates.</p>
++          </div>
++        </div>
++      </main>
++      <Footer />
++    </>
++  )
++}
+diff --git a/components/Header.tsx b/components/Header.tsx
+index 479e738..b38ff2c 100644
+--- a/components/Header.tsx
++++ b/components/Header.tsx
+@@ -6,21 +6,21 @@ export default function Header() {
+     <header className="bg-white border-b border-gray-100 sticky top-0 z-40">
+       <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+         <Link href="/" className="flex items-center gap-2">
+           <span className="text-2xl">💵</span>
+           <span className="font-bold text-gray-900 text-lg">TakeHomePay</span>
+         </Link>
+ 
+         {/* Desktop nav */}
+         <nav className="hidden sm:flex items-center gap-6 text-sm text-gray-600">
+           <Link href="/" className="hover:text-emerald-600 transition-colors">Calculator</Link>
+-          <Link href="/calculator/california" className="hover:text-emerald-600 transition-colors">By State</Link>
++          <Link href="/states" className="hover:text-emerald-600 transition-colors">By State</Link>
+           <Link href="/calculator/1099-vs-w2" className="hover:text-emerald-600 transition-colors">1099 vs W-2</Link>
+           <Link href="/compare/california-vs-texas" className="hover:text-emerald-600 transition-colors">Compare States</Link>
+           <a
+             href="/#generate-stub"
+             className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+           >
+             PDF Pay Stub — $5.99
+           </a>
+         </nav>
+ 
+diff --git a/components/MobileNav.tsx b/components/MobileNav.tsx
+index cf33aeb..ca78e01 100644
+--- a/components/MobileNav.tsx
++++ b/components/MobileNav.tsx
+@@ -68,20 +68,25 @@ export default function MobileNav() {
+                     <li key={s.code}>
+                       <Link
+                         href={`/calculator/${s.slug}`}
+                         onClick={() => setOpen(false)}
+                         className="block text-sm text-gray-700 hover:text-emerald-600 py-1 transition-colors"
+                       >
+                         {s.name} Calculator
+                       </Link>
+                     </li>
+                   ))}
++                  <li key="all-states">
++                    <Link href="/states" onClick={() => setOpen(false)} className="block text-sm text-emerald-600 hover:text-emerald-700 py-1 transition-colors font-medium">
++                      View All States →
++                    </Link>
++                  </li>
+                 </ul>
+               </div>
+             </nav>
+ 
+             <div className="p-5 border-t border-gray-100">
+               <Link
+                 href="/#generate-stub"
+                 onClick={() => setOpen(false)}
+                 className="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors"
+               >

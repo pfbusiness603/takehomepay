@@ -1,0 +1,79 @@
+﻿4487657 feat: sticky mobile pay stub CTA on scroll
+
+=== STAT ===
+ app/layout.tsx                 |  2 ++
+ components/StickyMobileCta.tsx | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+
+=== DIFF ===
+diff --git a/app/layout.tsx b/app/layout.tsx
+index 41ff79e..2782860 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -1,14 +1,15 @@
+ import type { Metadata } from 'next'
+ import { Inter } from 'next/font/google'
+ import Script from 'next/script'
+ import GoogleAnalytics from '@/components/GoogleAnalytics'
++import StickyMobileCta from '@/components/StickyMobileCta'
+ import './globals.css'
+ 
+ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+ 
+ export const metadata: Metadata = {
+   title: {
+     default: 'TakeHomePay — Free Paycheck & Pay Stub Calculator (2026)',
+     template: '%s | TakeHomePay',
+   },
+   description:
+@@ -32,14 +33,15 @@ export default function RootLayout({ children }: { children: React.ReactNode })
+         <Script
+           async
+           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? 'ca-pub-XXXXXXXXXXXXXXXXX'}`}
+           crossOrigin="anonymous"
+           strategy="afterInteractive"
+         />
+       </head>
+       <body className="bg-gray-50 text-gray-900 antialiased min-h-screen">
+         <GoogleAnalytics />
+         {children}
++        <StickyMobileCta />
+       </body>
+     </html>
+   )
+ }
+diff --git a/components/StickyMobileCta.tsx b/components/StickyMobileCta.tsx
+new file mode 100644
+index 0000000..e7c4568
+--- /dev/null
++++ b/components/StickyMobileCta.tsx
+@@ -0,0 +1,29 @@
++'use client'
++
++import { useEffect, useState } from 'react'
++
++export default function StickyMobileCta() {
++  const [visible, setVisible] = useState(false)
++
++  useEffect(() => {
++    function onScroll() {
++      setVisible(window.scrollY > 400)
++    }
++    window.addEventListener('scroll', onScroll, { passive: true })
++    return () => window.removeEventListener('scroll', onScroll)
++  }, [])
++
++  if (!visible) return null
++
++  return (
++    <div className="fixed bottom-0 left-0 right-0 z-40 sm:hidden px-4 pb-4 pt-2 bg-white/90 backdrop-blur-sm border-t border-gray-100 shadow-lg">
++      <a
++        href="/#generate-stub"
++        className="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-colors text-sm"
++        onClick={() => setVisible(false)}
++      >
++        Generate Pay Stub — $5.99
++      </a>
++    </div>
++  )
++}

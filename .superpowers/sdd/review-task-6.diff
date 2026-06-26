@@ -1,0 +1,174 @@
+﻿f9f9814 feat: add state switcher, compare CTA, and breadcrumb fix to state pages
+
+=== STAT ===
+ app/calculator/[state]/page.tsx | 15 ++++++++++++++-
+ components/CompareSelect.tsx    | 30 ++++++++++++++++++++++++++++++
+ components/StateSwitcher.tsx    | 27 +++++++++++++++++++++++++++
+ 3 files changed, 71 insertions(+), 1 deletion(-)
+
+=== DIFF ===
+diff --git a/app/calculator/[state]/page.tsx b/app/calculator/[state]/page.tsx
+index ec41878..7864927 100644
+--- a/app/calculator/[state]/page.tsx
++++ b/app/calculator/[state]/page.tsx
+@@ -4,20 +4,22 @@ import { notFound } from 'next/navigation'
+ import Header from '@/components/Header'
+ import Footer from '@/components/Footer'
+ import Calculator from '@/components/Calculator'
+ import AdUnit from '@/components/AdUnit'
+ import JsonLd, { webAppSchema, breadcrumbSchema, faqSchema } from '@/components/JsonLd'
+ import { STATES, stateBySlug } from '@/lib/states'
+ import { JOB_TYPES } from '@/lib/job-types'
+ import { STATE_TAX_CONFIGS } from '@/lib/tax-config'
+ import { calculate } from '@/lib/calculator'
+ import Link from 'next/link'
++import StateSwitcher from '@/components/StateSwitcher'
++import CompareSelect from '@/components/CompareSelect'
+ 
+ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
+ 
+ // State-specific additional payroll deductions (SDI, PFML, etc.)
+ const STATE_EXTRA_NOTES: Record<string, string[]> = {
+   CA: [
+     'California State Disability Insurance (SDI): employees pay 1.1% on all wages — this is withheld in addition to state income tax.',
+     'Los Angeles and San Francisco have no city income tax.',
+     'California has one of the highest top marginal income tax rates in the country at 12.3%, plus a 1% Mental Health Services Tax on income above $1 million.',
+   ],
+@@ -258,35 +260,36 @@ export default function StateCalculatorPage({ params }: Props) {
+     <>
+       <JsonLd data={webAppSchema(pageTitle, pageDesc, pageUrl)} />
+       <JsonLd data={breadcrumbSchema(crumbs)} />
+       <JsonLd data={faqSchema(faqs.map((f) => ({ q: f.q, a: f.a })))} />
+       <Header />
+       <main className="max-w-6xl mx-auto px-4 py-8 lg:py-12">
+         {/* Breadcrumb */}
+         <nav className="text-sm text-gray-400 mb-6 flex items-center gap-2">
+           <Link href="/" className="hover:text-emerald-600 transition-colors">Home</Link>
+           <span>/</span>
+-          <Link href="/calculator/california" className="hover:text-emerald-600 transition-colors">Calculator</Link>
++          <Link href="/states" className="hover:text-emerald-600 transition-colors">By State</Link>
+           <span>/</span>
+           <span className="text-gray-600">{st.name}</span>
+         </nav>
+ 
+         <div className="mb-8 max-w-2xl">
+           <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+             {st.name} Paycheck Calculator
+           </h1>
+           <p className="mt-3 text-gray-500">
+             Calculate your {st.name} take-home pay after all federal and state taxes.{' '}
+             {hasStateTax
+               ? `${st.name} has a state income tax — see how much comes out of each paycheck.`
+               : `${st.name} has no state income tax, so you keep more of every paycheck.`}
+           </p>
++          <StateSwitcher currentSlug={params.state} />
+         </div>
+ 
+         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+           <div className="lg:col-span-2">
+             <Suspense fallback={<div className="bg-white rounded-2xl border border-gray-100 p-6 h-96 animate-pulse" />}>
+               <Calculator defaultState={st.code} />
+             </Suspense>
+           </div>
+ 
+           <aside className="hidden lg:block">
+@@ -306,20 +309,30 @@ export default function StateCalculatorPage({ params }: Props) {
+                         {job.label}
+                       </Link>
+                     </li>
+                   ))}
+                 </ul>
+               </div>
+             </div>
+           </aside>
+         </div>
+ 
++        {/* Compare with another state */}
++        <div className="mt-6 max-w-2xl">
++          <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
++            <p className="text-sm text-gray-600 flex-1">
++              Wondering how {st.name} compares to another state?
++            </p>
++            <CompareSelect currentSlug={params.state} />
++          </div>
++        </div>
++
+         {/* ── 2026 State Tax Brackets ─────────────────────────────────────── */}
+         <section className="mt-14 max-w-3xl">
+           <h2 className="text-xl font-bold text-gray-900 mb-3">
+             2026 {st.name} State Income Tax Brackets
+           </h2>
+ 
+           {hasStateTax ? (
+             <div className="space-y-4">
+               <p className="text-sm text-gray-600">
+                 {taxConfig.brackets.single.filter(b => b.rate > 0).length === 1
+diff --git a/components/CompareSelect.tsx b/components/CompareSelect.tsx
+new file mode 100644
+index 0000000..a1de291
+--- /dev/null
++++ b/components/CompareSelect.tsx
+@@ -0,0 +1,30 @@
++'use client'
++
++import { STATES } from '@/lib/states'
++import { useRouter } from 'next/navigation'
++
++interface Props {
++  currentSlug: string
++}
++
++export default function CompareSelect({ currentSlug }: Props) {
++  const router = useRouter()
++
++  return (
++    <div className="flex items-center gap-2">
++      <select
++        defaultValue=""
++        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
++        onChange={(e) => {
++          if (e.target.value) router.push(`/compare/${currentSlug}-vs-${e.target.value}`)
++        }}
++      >
++        <option value="" disabled>Select state</option>
++        {STATES.filter((s) => s.slug !== currentSlug).map((s) => (
++          <option key={s.code} value={s.slug}>{s.name}</option>
++        ))}
++      </select>
++      <span className="text-sm text-gray-400">Compare →</span>
++    </div>
++  )
++}
+diff --git a/components/StateSwitcher.tsx b/components/StateSwitcher.tsx
+new file mode 100644
+index 0000000..5a1f3b6
+--- /dev/null
++++ b/components/StateSwitcher.tsx
+@@ -0,0 +1,27 @@
++'use client'
++
++import { useRouter } from 'next/navigation'
++import { STATES } from '@/lib/states'
++
++interface Props {
++  currentSlug: string
++}
++
++export default function StateSwitcher({ currentSlug }: Props) {
++  const router = useRouter()
++
++  return (
++    <div className="flex items-center gap-3 mt-3">
++      <span className="text-sm text-gray-500 shrink-0">Switch state:</span>
++      <select
++        value={currentSlug}
++        onChange={(e) => router.push(`/calculator/${e.target.value}`)}
++        className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
++      >
++        {STATES.map((s) => (
++          <option key={s.code} value={s.slug}>{s.name}</option>
++        ))}
++      </select>
++    </div>
++  )
++}
