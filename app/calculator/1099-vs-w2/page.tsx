@@ -124,6 +124,22 @@ export default function Page1099vsW2() {
           </div>
         </section>
 
+        {/* Pay stub CTA */}
+        <section className="mt-8 max-w-3xl">
+          <div className="bg-emerald-600 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-white font-bold text-lg">Need an official contractor pay stub?</h3>
+              <p className="text-emerald-100 text-sm mt-1">Generate a professional PDF pay stub for $5.99 — accepted by landlords, lenders, and banks.</p>
+            </div>
+            <Link
+              href="/#generate-stub"
+              className="shrink-0 bg-white text-emerald-700 hover:bg-emerald-50 font-semibold px-5 py-2.5 rounded-xl text-sm transition-colors whitespace-nowrap"
+            >
+              Generate Pay Stub — $5.99
+            </Link>
+          </div>
+        </section>
+
         {/* FAQ */}
         <section className="mt-12 max-w-3xl">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
