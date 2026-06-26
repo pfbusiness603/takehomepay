@@ -11,6 +11,8 @@ import { JOB_TYPES } from '@/lib/job-types'
 import { STATE_TAX_CONFIGS } from '@/lib/tax-config'
 import { calculate } from '@/lib/calculator'
 import Link from 'next/link'
+import StateSwitcher from '@/components/StateSwitcher'
+import CompareSelect from '@/components/CompareSelect'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
 
@@ -265,7 +267,7 @@ export default function StateCalculatorPage({ params }: Props) {
         <nav className="text-sm text-gray-400 mb-6 flex items-center gap-2">
           <Link href="/" className="hover:text-emerald-600 transition-colors">Home</Link>
           <span>/</span>
-          <Link href="/calculator/california" className="hover:text-emerald-600 transition-colors">Calculator</Link>
+          <Link href="/states" className="hover:text-emerald-600 transition-colors">By State</Link>
           <span>/</span>
           <span className="text-gray-600">{st.name}</span>
         </nav>
@@ -280,6 +282,7 @@ export default function StateCalculatorPage({ params }: Props) {
               ? `${st.name} has a state income tax — see how much comes out of each paycheck.`
               : `${st.name} has no state income tax, so you keep more of every paycheck.`}
           </p>
+          <StateSwitcher currentSlug={params.state} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -311,6 +314,16 @@ export default function StateCalculatorPage({ params }: Props) {
               </div>
             </div>
           </aside>
+        </div>
+
+        {/* Compare with another state */}
+        <div className="mt-6 max-w-2xl">
+          <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+            <p className="text-sm text-gray-600 flex-1">
+              Wondering how {st.name} compares to another state?
+            </p>
+            <CompareSelect currentSlug={params.state} />
+          </div>
         </div>
 
         {/* ── 2026 State Tax Brackets ─────────────────────────────────────── */}
