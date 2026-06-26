@@ -70,7 +70,7 @@ export default function Image({ params }: { params: { state: string; jobtype: st
             color: 'rgba(255,255,255,0.9)',
             fontWeight: 600,
           }}>
-            Free · PDF Pay Stub $4.99
+            Free · PDF Pay Stub $5.99
           </div>
         </div>
       </div>

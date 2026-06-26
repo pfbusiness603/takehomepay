@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
               name: 'Professional PDF Pay Stub',
               description: `Pay stub for ${stubData.employeeName ?? 'Employee'} — ${stubData.payPeriodStart} to ${stubData.payPeriodEnd}`,
             },
-            unit_amount: 499, // $4.99
+            unit_amount: 599, // $5.99
           },
           quantity: 1,
         },

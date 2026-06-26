@@ -81,7 +81,7 @@ export default function ResultsPanel({ results, inputs, buildShareUrl }: Results
             onClick={() => setShowStubForm(true)}
             className="shrink-0 bg-white text-emerald-700 hover:bg-emerald-50 font-bold px-5 py-2.5 rounded-xl transition-colors text-sm whitespace-nowrap shadow-sm"
           >
-            Generate Pay Stub — $4.99
+            Generate Pay Stub — $5.99
           </button>
         </div>
 

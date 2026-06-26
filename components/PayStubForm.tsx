@@ -144,7 +144,7 @@ export default function PayStubForm({ results, inputs, onClose }: PayStubFormPro
             disabled={loading}
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors"
           >
-            {loading ? 'Redirecting to payment…' : 'Pay $4.99 & Download PDF'}
+            {loading ? 'Redirecting to payment…' : 'Pay $5.99 & Download PDF'}
           </button>
           <p className="text-xs text-center text-gray-400">Secure payment via Stripe · PDF delivered instantly</p>
           <p className="text-xs text-center text-gray-400 leading-relaxed">

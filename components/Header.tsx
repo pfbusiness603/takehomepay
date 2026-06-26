@@ -20,7 +20,7 @@ export default function Header() {
             href="/#generate-stub"
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
-            PDF Pay Stub — $4.99
+            PDF Pay Stub — $5.99
           </a>
         </nav>
 

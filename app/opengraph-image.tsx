@@ -51,7 +51,7 @@ export default function Image() {
             color: 'rgba(255,255,255,0.9)',
             fontWeight: 600,
           }}>
-            PDF Pay Stub · $4.99
+            PDF Pay Stub · $5.99
           </div>
         </div>
       </div>

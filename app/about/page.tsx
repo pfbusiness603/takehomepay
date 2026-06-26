@@ -63,7 +63,7 @@ export default function AboutPage() {
           <section>
             <h2 className="text-xl font-bold text-gray-900 mb-2">The PDF Pay Stub</h2>
             <p>
-              For $4.99, TakeHomePay generates a professional PDF pay stub that includes your employer and employee
+              For $5.99, TakeHomePay generates a professional PDF pay stub that includes your employer and employee
               information, pay period dates, an itemized earnings and deductions breakdown, and year-to-date totals.
               It&apos;s designed for freelancers, self-employed workers, and W-2 employees who need quick documentation
               of their income for landlords, lenders, or personal records.

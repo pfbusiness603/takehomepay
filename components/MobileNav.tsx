@@ -85,7 +85,7 @@ export default function MobileNav() {
                 onClick={() => setOpen(false)}
                 className="block w-full text-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors"
               >
-                PDF Pay Stub — $4.99
+                PDF Pay Stub — $5.99
               </Link>
             </div>
           </div>

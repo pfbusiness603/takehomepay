@@ -29,14 +29,14 @@ const FAQS = [
   },
   {
     q: 'What does the PDF pay stub include?',
-    a: 'Your generated pay stub includes employer name, employee name, pay period dates, itemized earnings, all tax deductions, pre-tax benefit deductions, net pay, and year-to-date totals — for just $4.99 via secure Stripe checkout. For personal record-keeping purposes only.',
+    a: 'Your generated pay stub includes employer name, employee name, pay period dates, itemized earnings, all tax deductions, pre-tax benefit deductions, net pay, and year-to-date totals — for just $5.99 via secure Stripe checkout. For personal record-keeping purposes only.',
   },
 ]
 
 export const metadata: Metadata = {
   title: 'Free Paycheck Calculator 2026 — All 50 States',
   description:
-    'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states. Generate a professional PDF pay stub for just $4.99.',
+    'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states. Generate a professional PDF pay stub for just $5.99.',
   openGraph: {
     title: 'Free Paycheck Calculator 2026 — All 50 States',
     description: 'Calculate your exact take-home pay after federal tax, state tax, Social Security, and Medicare. Free for all 50 states.',
@@ -113,7 +113,7 @@ export default function HomePage() {
               <div className="bg-indigo-600 rounded-2xl p-5 text-white text-center">
                 <p className="font-bold text-lg">PDF Pay Stub</p>
                 <p className="text-sm opacity-80 mt-1">Professional format · YTD totals</p>
-                <p className="text-3xl font-bold mt-3">$4.99</p>
+                <p className="text-3xl font-bold mt-3">$5.99</p>
                 <p className="text-xs opacity-60 mt-1">One-time · Instant download</p>
               </div>
             </div>

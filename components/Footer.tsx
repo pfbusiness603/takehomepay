@@ -31,7 +31,7 @@ export default function Footer() {
             <p className="text-sm font-semibold text-gray-700 mb-3">Tools</p>
             <ul className="space-y-1 text-sm text-gray-500">
               <li><Link href="/" className="hover:text-emerald-600 transition-colors">Paycheck Calculator</Link></li>
-              <li><Link href="/#generate-stub" className="hover:text-emerald-600 transition-colors">PDF Pay Stub — $4.99</Link></li>
+              <li><Link href="/#generate-stub" className="hover:text-emerald-600 transition-colors">PDF Pay Stub — $5.99</Link></li>
               <li><Link href="/how-we-calculate" className="hover:text-emerald-600 transition-colors">How We Calculate</Link></li>
             </ul>
           </div>
