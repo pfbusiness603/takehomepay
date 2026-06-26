@@ -76,6 +76,9 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Main calculator */}
           <div className="lg:col-span-2" id="generate-stub">
+            <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wide mb-2">
+              ↓ Select your state for accurate results
+            </p>
             <Suspense fallback={<div className="bg-white rounded-2xl border border-gray-100 p-6 h-96 animate-pulse" />}>
               <Calculator />
             </Suspense>
