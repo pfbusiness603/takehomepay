@@ -9,6 +9,7 @@ import JsonLd, { breadcrumbSchema } from '@/components/JsonLd'
 import { STATES, stateBySlug } from '@/lib/states'
 import { calculate } from '@/lib/calculator'
 import { SALARY_AMOUNTS } from '@/lib/salary-amounts'
+import { FICA } from '@/lib/tax-config'
 import Link from 'next/link'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
@@ -257,7 +258,7 @@ export default function SalaryPage({ params }: Props) {
                 <tr>
                   <td className="px-4 py-3 text-gray-700">Social Security (6.2%)</td>
                   <td className="px-4 py-3 text-right text-gray-900">{fmt(r.annualSocialSecurity)}</td>
-                  <td className="px-4 py-3 text-right text-gray-500">{amount > 184500 ? `${(11439 / amount * 100).toFixed(2)}%` : '6.20%'}</td>
+                  <td className="px-4 py-3 text-right text-gray-500">{amount > FICA.socialSecurityWageCap ? `${((FICA.socialSecurityWageCap * FICA.socialSecurityRate) / amount * 100).toFixed(2)}%` : '6.20%'}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-gray-700">Medicare (1.45%)</td>

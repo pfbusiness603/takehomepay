@@ -1,0 +1,395 @@
+﻿c43262c fix: update Social Security wage base to $184,500 for 2026
+
+=== STAT ===
+ app/about/page.tsx                              |  4 ++--
+ app/calculator/[state]/page.tsx                 |  6 +++---
+ app/calculator/[state]/salary/[amount]/page.tsx |  4 ++--
+ app/how-we-calculate/page.tsx                   |  4 ++--
+ app/page.tsx                                    |  4 ++--
+ lib/tax-config.ts                               | 12 ++++++------
+ 6 files changed, 17 insertions(+), 17 deletions(-)
+
+=== DIFF ===
+diff --git a/app/about/page.tsx b/app/about/page.tsx
+index 889ddb7..aca8a66 100644
+--- a/app/about/page.tsx
++++ b/app/about/page.tsx
+@@ -38,21 +38,21 @@ export default function AboutPage() {
+               your final take-home amount. No guessing.
+             </p>
+           </section>
+ 
+           <section>
+             <h2 className="text-xl font-bold text-gray-900 mb-2">What the Calculator Covers</h2>
+             <ul className="space-y-2 list-none pl-0">
+               {[
+                 'All 50 U.S. states — every state has its own income tax page with current 2026 rates',
+                 '2026 federal income tax brackets (IRS Rev. Proc. estimates, updated annually)',
+-                'FICA: Social Security at 6.2% on wages up to $176,100 and Medicare at 1.45% on all wages',
++                'FICA: Social Security at 6.2% on wages up to $184,500 and Medicare at 1.45% on all wages',
+                 'W-2 employees and 1099 independent contractors (self-employment tax: 15.3% on 92.35% of net income)',
+                 'Salary and hourly input modes — enter an hourly rate and hours per week for automatic conversion',
+                 'Pre-tax deductions: 401(k)/retirement contributions and health insurance premiums',
+                 'Filing status: single or married filing jointly — affects both federal and state brackets',
+                 'Annual and per-paycheck views, with a state comparison tool to see how your net pay differs by location',
+               ].map((item) => (
+                 <li key={item} className="flex gap-2.5 text-sm">
+                   <span className="text-emerald-500 shrink-0">✓</span>
+                   <span>{item}</span>
+                 </li>
+@@ -71,21 +71,21 @@ export default function AboutPage() {
+             <p>
+               Pay stubs are generated on-demand via Stripe&apos;s secure checkout. No subscription required — pay once,
+               download immediately.
+             </p>
+           </section>
+ 
+           <section>
+             <h2 className="text-xl font-bold text-gray-900 mb-2">Our Tax Data</h2>
+             <p>
+               All tax rates are updated annually. For 2026, we use IRS Rev. Proc. estimates for federal brackets,
+-              the confirmed Social Security wage cap of $176,100, and the latest published rates for all 50 states.
++              the confirmed Social Security wage cap of $184,500, and the latest published rates for all 50 states.
+               State rates are sourced from each state&apos;s Department of Revenue or equivalent agency.
+             </p>
+             <p>
+               TakeHomePay is designed for estimation and planning — not for filing taxes or determining exact
+               employer withholding. Actual paychecks may differ based on your W-4 elections, employer-specific
+               benefits, local taxes, and other factors. We always recommend verifying important figures with your
+               payroll department or a qualified CPA.
+             </p>
+           </section>
+ 
+diff --git a/app/calculator/[state]/page.tsx b/app/calculator/[state]/page.tsx
+index e7202f8..ec41878 100644
+--- a/app/calculator/[state]/page.tsx
++++ b/app/calculator/[state]/page.tsx
+@@ -51,21 +51,21 @@ const STATE_EXTRA_NOTES: Record<string, string[]> = {
+     'Colorado Family & Medical Leave Insurance (FAMLI): employees pay 0.45% of gross wages.',
+   ],
+   HI: [
+     'Hawaii Temporary Disability Insurance (TDI): 0.5% on wages, capped at $1,254.66 per week.',
+     'Hawaii has no city or county income taxes beyond the state rate.',
+   ],
+   RI: [
+     'Rhode Island Temporary Caregiver Insurance (TCI): 1.3% on wages up to $84,000.',
+   ],
+   CT: [
+-    'Connecticut Paid Family & Medical Leave: 0.5% on wages up to the Social Security wage cap ($176,100).',
++    'Connecticut Paid Family & Medical Leave: 0.5% on wages up to the Social Security wage cap ($184,500).',
+   ],
+   PA: [
+     'Pennsylvania has a flat 3.07% income tax — one of the lowest flat rates in the country.',
+     'Many Pennsylvania municipalities charge a local earned income tax (EIT), typically 1%–3.9%. Philadelphia residents pay a 3.75% city wage tax.',
+   ],
+   IL: [
+     'Illinois has a flat 4.95% income tax rate — it does not have graduated brackets.',
+     'Chicago residents pay no city income tax, but Illinois has relatively high property taxes.',
+   ],
+   TX: [
+@@ -221,29 +221,29 @@ export default function StateCalculatorPage({ params }: Props) {
+           a: `The most effective way to reduce ${st.name} state income tax is to maximize pre-tax retirement contributions — 401(k), 403(b), or IRA contributions reduce your federal taxable income, and most states follow the federal treatment. Health Savings Account (HSA) contributions and flexible spending accounts (FSAs) may also reduce your ${st.name} taxable income. Consult a CPA familiar with ${st.name} tax law for personalized advice.`,
+         },
+         {
+           q: `Is ${st.name} a high-tax or low-tax state?`,
+           a: `${st.name}'s top income tax rate of ${pct(maxRate)} puts it ${maxRate > 0.07 ? 'among the higher-tax states nationally' : maxRate > 0.04 ? 'in the middle of the pack nationally' : 'among the lower-tax states nationally'}. Your overall tax burden also depends on property taxes, sales taxes, and any local income taxes in your city or county.`,
+         },
+       ]
+     : [
+         {
+           q: `Does ${st.name} have a state income tax?`,
+-          a: `No. ${st.name} is one of only 9 states with no state income tax on wages. Residents still pay federal income tax (10%–37%), Social Security (6.2% on wages up to $176,100), and Medicare (1.45% on all wages).`,
++          a: `No. ${st.name} is one of only 9 states with no state income tax on wages. Residents still pay federal income tax (10%–37%), Social Security (6.2% on wages up to $184,500), and Medicare (1.45% on all wages).`,
+         },
+         {
+           q: `How much more do I take home in ${st.name} compared to a high-tax state?`,
+           a: `At a $75,000 salary as a single filer, a ${st.name} resident takes home approximately $3,000–$6,000 more per year compared to a resident of California (top rate 12.3%) or New York (top rate 9.65%). The exact savings depend on your income level.`,
+         },
+         {
+           q: `What taxes do ${st.name} residents still pay?`,
+-          a: `${st.name} residents pay federal income tax using the standard 2026 brackets (10%–37%), Social Security tax (6.2% on wages up to $176,100), and Medicare (1.45% on all wages, plus 0.9% additional Medicare on wages above $200,000 for single filers). State and local sales taxes may also apply.`,
++          a: `${st.name} residents pay federal income tax using the standard 2026 brackets (10%–37%), Social Security tax (6.2% on wages up to $184,500), and Medicare (1.45% on all wages, plus 0.9% additional Medicare on wages above $200,000 for single filers). State and local sales taxes may also apply.`,
+         },
+         {
+           q: `Does living in ${st.name} mean no taxes at all?`,
+           a: `No — ${st.name} residents still owe federal income taxes, FICA payroll taxes (Social Security and Medicare), and potentially local taxes depending on the city. The savings come entirely from the absence of state income tax withholding on wages.`,
+         },
+       ]
+ 
+   const pageUrl = `${SITE_URL}/calculator/${params.state}`
+   const pageTitle = `${st.name} Paycheck Calculator 2026`
+   const pageDesc = `Calculate your ${st.name} take-home pay after federal and state income tax. Free ${st.name} paycheck calculator updated for 2026.`
+diff --git a/app/calculator/[state]/salary/[amount]/page.tsx b/app/calculator/[state]/salary/[amount]/page.tsx
+index d599f87..1dda6cb 100644
+--- a/app/calculator/[state]/salary/[amount]/page.tsx
++++ b/app/calculator/[state]/salary/[amount]/page.tsx
+@@ -175,21 +175,21 @@ export default function SalaryPage({ params }: Props) {
+             Where Your ${amount.toLocaleString()} {st.name} Salary Goes
+           </h2>
+           <p className="text-sm text-gray-600 leading-relaxed">
+             On a ${amount.toLocaleString()} salary in {st.name}, a single W-2 filer pays approximately{' '}
+             <strong>{fmt(r.annualFederalTax)}</strong> in federal income tax (effective rate{' '}
+             {(r.effectiveFederalRate * 100).toFixed(1)}%),{' '}
+             {r.annualStateTax > 0
+               ? <><strong>{fmt(r.annualStateTax)}</strong> in {st.name} state income tax (effective rate {(r.effectiveStateRate * 100).toFixed(1)}%), </>
+               : <>{st.name} has no state income tax, </>
+             }
+-            <strong>{fmt(r.annualSocialSecurity)}</strong> in Social Security (6.2% up to $176,100), and{' '}
++            <strong>{fmt(r.annualSocialSecurity)}</strong> in Social Security (6.2% up to $184,500), and{' '}
+             <strong>{fmt(r.annualMedicare)}</strong> in Medicare (1.45%).
+             {hasSdi && (
+               <> Additional {st.name} payroll taxes ({r.additionalTaxDetails.map(t => t.shortName).join(', ')}) total <strong>{fmt(r.annualAdditionalTaxes)}</strong>.</>
+             )}{' '}
+             That leaves you with <strong>{fmt(annualNet)}/year</strong> — or{' '}
+             <strong>{fmtFull(biweeklyNet)}</strong> per biweekly paycheck.
+           </p>
+         </section>
+ 
+         {/* Take-home by pay period */}
+@@ -250,21 +250,21 @@ export default function SalaryPage({ params }: Props) {
+                 {r.annualStateTax > 0 && (
+                   <tr>
+                     <td className="px-4 py-3 text-gray-700">{st.name} State Tax</td>
+                     <td className="px-4 py-3 text-right text-gray-900">{fmt(r.annualStateTax)}</td>
+                     <td className="px-4 py-3 text-right text-gray-500">{(r.effectiveStateRate * 100).toFixed(2)}%</td>
+                   </tr>
+                 )}
+                 <tr>
+                   <td className="px-4 py-3 text-gray-700">Social Security (6.2%)</td>
+                   <td className="px-4 py-3 text-right text-gray-900">{fmt(r.annualSocialSecurity)}</td>
+-                  <td className="px-4 py-3 text-right text-gray-500">{amount > 176100 ? `${(10927 / amount * 100).toFixed(2)}%` : '6.20%'}</td>
++                  <td className="px-4 py-3 text-right text-gray-500">{amount > 184500 ? `${(11439 / amount * 100).toFixed(2)}%` : '6.20%'}</td>
+                 </tr>
+                 <tr>
+                   <td className="px-4 py-3 text-gray-700">Medicare (1.45%)</td>
+                   <td className="px-4 py-3 text-right text-gray-900">{fmt(r.annualMedicare)}</td>
+                   <td className="px-4 py-3 text-right text-gray-500">1.45%</td>
+                 </tr>
+                 {r.additionalTaxDetails.map((tax) => (
+                   <tr key={tax.name}>
+                     <td className="px-4 py-3 text-gray-700">{tax.name}</td>
+                     <td className="px-4 py-3 text-right text-gray-900">{fmt(tax.annualAmount)}</td>
+diff --git a/app/how-we-calculate/page.tsx b/app/how-we-calculate/page.tsx
+index 2428b5c..4d26ced 100644
+--- a/app/how-we-calculate/page.tsx
++++ b/app/how-we-calculate/page.tsx
+@@ -136,21 +136,21 @@ export default function HowWeCalculatePage() {
+           {/* Step 5 */}
+           <section>
+             <h2 className="text-lg font-bold text-gray-900 mb-2">Step 5: Self-Employment Tax (1099 Workers)</h2>
+             <p>
+               For 1099 independent contractors, there is no employer to pay the other half of FICA. Instead, you
+               pay Self-Employment (SE) tax at a combined rate that covers both halves:
+             </p>
+             <div className="bg-gray-50 rounded-xl p-4 my-3 space-y-1.5 text-xs font-mono text-gray-700">
+               <p>SE tax base: net income × 92.35%</p>
+               <p>  (the 0.9235 factor accounts for the deductible employer half)</p>
+-              <p>Social Security: 12.4% on SE base up to $176,100</p>
++              <p>Social Security: 12.4% on SE base up to $184,500</p>
+               <p>Medicare: 2.9% on all SE base</p>
+               <p>Combined SE tax rate: 15.3%</p>
+               <p>Deduction: half of SE tax is deductible from federal income</p>
+             </div>
+           </section>
+ 
+           {/* Step 6 */}
+           <section>
+             <h2 className="text-lg font-bold text-gray-900 mb-2">Step 6: Net Pay</h2>
+             <p>Net pay is what actually lands in your bank account each pay period:</p>
+@@ -169,21 +169,21 @@ export default function HowWeCalculatePage() {
+             </p>
+           </section>
+ 
+           {/* Data sources */}
+           <section>
+             <h2 className="text-lg font-bold text-gray-900 mb-2">Data Sources & Accuracy</h2>
+             <ul className="space-y-2">
+               {[
+                 'Federal brackets: IRS Rev. Proc. 2025 estimates with ~2.8% inflation adjustment for 2026',
+                 'FICA rates: IRS Publication 15 (Circular E) for 2026',
+-                'Social Security wage cap: $176,100 for 2026 (confirmed by SSA)',
++                'Social Security wage cap: $184,500 for 2026 (confirmed by SSA)',
+                 'State income tax rates: sourced from each state\'s Department of Revenue or official tax authority',
+                 'State standard deductions and exemptions: same official state sources, updated annually',
+               ].map((item) => (
+                 <li key={item} className="flex gap-2.5">
+                   <span className="text-emerald-500 shrink-0">•</span>
+                   <span>{item}</span>
+                 </li>
+               ))}
+             </ul>
+             <p className="mt-4">
+diff --git a/app/page.tsx b/app/page.tsx
+index 1f86708..f049051 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -10,25 +10,25 @@ import Link from 'next/link'
+ 
+ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://takehomepaycalculator.dev'
+ 
+ const FAQS = [
+   {
+     q: 'What is gross pay vs. net pay?',
+     a: 'Gross pay is your salary or hourly wage before any deductions. Net pay (take-home pay) is what you actually receive after federal taxes, state taxes, FICA, and benefit deductions.',
+   },
+   {
+     q: 'Does this calculator use 2026 tax rates?',
+-    a: 'Yes. This calculator uses the 2026 federal income tax brackets and FICA rates. The Social Security wage cap is $176,100 for 2026. State tax rates reflect the latest available rates.',
++    a: 'Yes. This calculator uses the 2026 federal income tax brackets and FICA rates. The Social Security wage cap is $184,500 for 2026. State tax rates reflect the latest available rates.',
+   },
+   {
+     q: 'What is FICA?',
+-    a: 'FICA taxes fund Social Security and Medicare. Employees pay 6.2% for Social Security (on wages up to $176,100) and 1.45% for Medicare on all wages.',
++    a: 'FICA taxes fund Social Security and Medicare. Employees pay 6.2% for Social Security (on wages up to $184,500) and 1.45% for Medicare on all wages.',
+   },
+   {
+     q: 'How do pre-tax deductions reduce my taxes?',
+     a: '401(k) contributions and employer health insurance premiums are deducted from your gross pay before federal and state taxes are calculated, lowering your taxable income and tax bill.',
+   },
+   {
+     q: 'What does the PDF pay stub include?',
+     a: 'Your generated pay stub includes employer name, employee name, pay period dates, itemized earnings, all tax deductions, pre-tax benefit deductions, net pay, and year-to-date totals — for just $4.99 via secure Stripe checkout. For personal record-keeping purposes only.',
+   },
+ ]
+diff --git a/lib/tax-config.ts b/lib/tax-config.ts
+index 9211f0f..145b13e 100644
+--- a/lib/tax-config.ts
++++ b/lib/tax-config.ts
+@@ -60,21 +60,21 @@ export const FEDERAL_BRACKETS: { single: TaxBracket[]; married: TaxBracket[] } =
+     { min: 394_600,  max: 501_050, rate: 0.32 },
+     { min: 501_050,  max: 751_600, rate: 0.35 },
+     { min: 751_600,  max: null,    rate: 0.37 },
+   ],
+ }
+ 
+ // ─── FICA ─────────────────────────────────────────────────────────────────────
+ 
+ export const FICA = {
+   socialSecurityRate: 0.062,
+-  socialSecurityWageCap: 176_100,
++  socialSecurityWageCap: 184_500,
+   medicareRate: 0.0145,
+   additionalMedicareRate: 0.009,
+   additionalMedicareThreshold: {
+     single: 200_000,
+     married: 250_000,
+   },
+ } as const
+ 
+ // ─── State Tax Configs ────────────────────────────────────────────────────────
+ 
+@@ -172,21 +172,21 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
+       { name: 'California SDI', shortName: 'SDI', rate: 0.011 },
+     ],
+   },
+   CO: {
+     name: 'Colorado', code: 'CO',
+     brackets: flat(0.044),
+     standardDeduction: { single: 15_000, married: 30_000 }, // mirrors federal
+     personalExemption: NO_EXEMPTION,
+     additionalTaxes: [
+       // FAMLI: employee pays 50% of 0.9% — source: CDLE 2026
+-      { name: 'CO FAMLI', shortName: 'FAMLI', rate: 0.0045, wageCap: 176_100 },
++      { name: 'CO FAMLI', shortName: 'FAMLI', rate: 0.0045, wageCap: 184_500 },
+     ],
+   },
+   CT: {
+     name: 'Connecticut', code: 'CT',
+     brackets: {
+       single: [
+         { min: 0,       max: 10_000,  rate: 0.02 },
+         { min: 10_000,  max: 50_000,  rate: 0.045 },
+         { min: 50_000,  max: 100_000, rate: 0.055 },
+         { min: 100_000, max: 200_000, rate: 0.06 },
+@@ -201,21 +201,21 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
+         { min: 200_000, max: 400_000, rate: 0.06 },
+         { min: 400_000, max: 500_000, rate: 0.065 },
+         { min: 500_000, max: 1_000_000, rate: 0.069 },
+         { min: 1_000_000, max: null,  rate: 0.0699 },
+       ],
+     },
+     standardDeduction: NO_DEDUCTION,
+     personalExemption: { single: 15_000, married: 24_000 },
+     additionalTaxes: [
+       // PFML: 0.5% up to SS wage base — source: CT PFML Authority 2026
+-      { name: 'CT Paid Family Leave', shortName: 'PFML', rate: 0.005, wageCap: 176_100 },
++      { name: 'CT Paid Family Leave', shortName: 'PFML', rate: 0.005, wageCap: 184_500 },
+     ],
+   },
+   DE: {
+     name: 'Delaware', code: 'DE',
+     brackets: {
+       single: [
+         { min: 0,       max: 2_000,  rate: 0 },
+         { min: 2_000,   max: 5_000,  rate: 0.022 },
+         { min: 5_000,   max: 10_000, rate: 0.039 },
+         { min: 10_000,  max: 20_000, rate: 0.048 },
+@@ -395,21 +395,21 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
+     standardDeduction: { single: 2_400, married: 4_800 },
+     personalExemption: { single: 3_200, married: 6_400 },
+   },
+   MA: {
+     name: 'Massachusetts', code: 'MA',
+     brackets: flat(0.05),
+     standardDeduction: NO_DEDUCTION,
+     personalExemption: { single: 4_400, married: 8_800 },
+     additionalTaxes: [
+       // PFML: employee share ~0.46% up to SS wage base — source: MA DFML 2026
+-      { name: 'MA Paid Family Leave', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
++      { name: 'MA Paid Family Leave', shortName: 'PFML', rate: 0.0046, wageCap: 184_500 },
+     ],
+   },
+   MI: {
+     name: 'Michigan', code: 'MI',
+     brackets: flat(0.0405),
+     standardDeduction: NO_DEDUCTION,
+     personalExemption: { single: 5_600, married: 11_200 },
+   },
+   MN: {
+     name: 'Minnesota', code: 'MN',
+@@ -674,21 +674,21 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
+         { min: 0,       max: 18_400,  rate: 0.0475 },
+         { min: 18_400,  max: 250_000, rate: 0.0675 },
+         { min: 250_000, max: 400_000, rate: 0.0875 },
+         { min: 400_000, max: null,    rate: 0.099 },
+       ],
+     },
+     standardDeduction: { single: 2_420, married: 4_840 },
+     personalExemption: { single: 236, married: 472 },
+     additionalTaxes: [
+       // Paid Leave Oregon: employee pays 60% of 1% = 0.6% up to SS cap — source: OED 2026
+-      { name: 'Oregon Paid Leave', shortName: 'PFML', rate: 0.006, wageCap: 176_100 },
++      { name: 'Oregon Paid Leave', shortName: 'PFML', rate: 0.006, wageCap: 184_500 },
+     ],
+   },
+   PA: {
+     name: 'Pennsylvania', code: 'PA',
+     brackets: flat(0.0307),
+     standardDeduction: NO_DEDUCTION,
+     personalExemption: NO_EXEMPTION,
+   },
+   RI: {
+     name: 'Rhode Island', code: 'RI',
+@@ -790,21 +790,21 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
+     standardDeduction: { single: 8_500, married: 17_000 },
+     personalExemption: { single: 930, married: 1_860 },
+   },
+   WA: {
+     name: 'Washington', code: 'WA',
+     brackets: NO_TAX,
+     standardDeduction: NO_DEDUCTION,
+     personalExemption: NO_EXEMPTION,
+     additionalTaxes: [
+       // PFML: 0.46% up to SS wage base — source: WA ESD 2026
+-      { name: 'WA PFML', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
++      { name: 'WA PFML', shortName: 'PFML', rate: 0.0046, wageCap: 184_500 },
+       // WA Cares Fund (long-term care): 0.58%, no wage cap — source: WA DCYF 2026
+       { name: 'WA Cares Fund', shortName: 'WA Cares', rate: 0.0058 },
+     ],
+   },
+   WV: {
+     name: 'West Virginia', code: 'WV',
+     brackets: {
+       single: [
+         { min: 0,       max: 10_000,  rate: 0.0236 },
+         { min: 10_000,  max: 25_000,  rate: 0.0315 },
