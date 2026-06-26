@@ -75,6 +75,11 @@ export default function MobileNav() {
                       </Link>
                     </li>
                   ))}
+                  <li key="all-states">
+                    <Link href="/states" onClick={() => setOpen(false)} className="block text-sm text-emerald-600 hover:text-emerald-700 py-1 transition-colors font-medium">
+                      View All States →
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </nav>

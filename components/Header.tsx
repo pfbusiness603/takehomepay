@@ -13,7 +13,7 @@ export default function Header() {
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-6 text-sm text-gray-600">
           <Link href="/" className="hover:text-emerald-600 transition-colors">Calculator</Link>
-          <Link href="/calculator/california" className="hover:text-emerald-600 transition-colors">By State</Link>
+          <Link href="/states" className="hover:text-emerald-600 transition-colors">By State</Link>
           <Link href="/calculator/1099-vs-w2" className="hover:text-emerald-600 transition-colors">1099 vs W-2</Link>
           <Link href="/compare/california-vs-texas" className="hover:text-emerald-600 transition-colors">Compare States</Link>
           <a
