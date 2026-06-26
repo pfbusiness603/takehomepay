@@ -19,6 +19,7 @@ export default function PayStubForm({ results, inputs, onClose }: PayStubFormPro
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [employmentType, setEmploymentType] = useState<'w2' | '1099'>(inputs.employmentType)
 
   function setField(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -41,6 +42,7 @@ export default function PayStubForm({ results, inputs, onClose }: PayStubFormPro
             payFrequency: inputs.payFrequency,
             filingStatus: inputs.filingStatus,
             state: inputs.state,
+            employmentType,
             results,
           },
         }),
@@ -75,6 +77,26 @@ export default function PayStubForm({ results, inputs, onClose }: PayStubFormPro
             <p className="text-sm text-gray-500 mt-0.5">{freq} • {results.stateName}</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+
+        {/* Employment type toggle */}
+        <div className="px-6 pb-3 shrink-0">
+          <div className="flex rounded-xl overflow-hidden border border-gray-200 text-sm font-medium">
+            <button
+              type="button"
+              onClick={() => setEmploymentType('w2')}
+              className={`flex-1 py-2 transition-colors ${employmentType === 'w2' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              W-2 Employee
+            </button>
+            <button
+              type="button"
+              onClick={() => setEmploymentType('1099')}
+              className={`flex-1 py-2 transition-colors ${employmentType === '1099' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              1099 Contractor
+            </button>
+          </div>
         </div>
 
         {/* Scrollable form area */}
