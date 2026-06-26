@@ -58,7 +58,7 @@ const STATE_EXTRA_NOTES: Record<string, string[]> = {
     'Rhode Island Temporary Caregiver Insurance (TCI): 1.3% on wages up to $84,000.',
   ],
   CT: [
-    'Connecticut Paid Family & Medical Leave: 0.5% on wages up to the Social Security wage cap ($176,100).',
+    'Connecticut Paid Family & Medical Leave: 0.5% on wages up to the Social Security wage cap ($184,500).',
   ],
   PA: [
     'Pennsylvania has a flat 3.07% income tax — one of the lowest flat rates in the country.',
@@ -228,7 +228,7 @@ export default function StateCalculatorPage({ params }: Props) {
     : [
         {
           q: `Does ${st.name} have a state income tax?`,
-          a: `No. ${st.name} is one of only 9 states with no state income tax on wages. Residents still pay federal income tax (10%–37%), Social Security (6.2% on wages up to $176,100), and Medicare (1.45% on all wages).`,
+          a: `No. ${st.name} is one of only 9 states with no state income tax on wages. Residents still pay federal income tax (10%–37%), Social Security (6.2% on wages up to $184,500), and Medicare (1.45% on all wages).`,
         },
         {
           q: `How much more do I take home in ${st.name} compared to a high-tax state?`,
@@ -236,7 +236,7 @@ export default function StateCalculatorPage({ params }: Props) {
         },
         {
           q: `What taxes do ${st.name} residents still pay?`,
-          a: `${st.name} residents pay federal income tax using the standard 2026 brackets (10%–37%), Social Security tax (6.2% on wages up to $176,100), and Medicare (1.45% on all wages, plus 0.9% additional Medicare on wages above $200,000 for single filers). State and local sales taxes may also apply.`,
+          a: `${st.name} residents pay federal income tax using the standard 2026 brackets (10%–37%), Social Security tax (6.2% on wages up to $184,500), and Medicare (1.45% on all wages, plus 0.9% additional Medicare on wages above $200,000 for single filers). State and local sales taxes may also apply.`,
         },
         {
           q: `Does living in ${st.name} mean no taxes at all?`,

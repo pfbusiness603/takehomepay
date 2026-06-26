@@ -45,7 +45,7 @@ export default function AboutPage() {
               {[
                 'All 50 U.S. states — every state has its own income tax page with current 2026 rates',
                 '2026 federal income tax brackets (IRS Rev. Proc. estimates, updated annually)',
-                'FICA: Social Security at 6.2% on wages up to $176,100 and Medicare at 1.45% on all wages',
+                'FICA: Social Security at 6.2% on wages up to $184,500 and Medicare at 1.45% on all wages',
                 'W-2 employees and 1099 independent contractors (self-employment tax: 15.3% on 92.35% of net income)',
                 'Salary and hourly input modes — enter an hourly rate and hours per week for automatic conversion',
                 'Pre-tax deductions: 401(k)/retirement contributions and health insurance premiums',
@@ -78,7 +78,7 @@ export default function AboutPage() {
             <h2 className="text-xl font-bold text-gray-900 mb-2">Our Tax Data</h2>
             <p>
               All tax rates are updated annually. For 2026, we use IRS Rev. Proc. estimates for federal brackets,
-              the confirmed Social Security wage cap of $176,100, and the latest published rates for all 50 states.
+              the confirmed Social Security wage cap of $184,500, and the latest published rates for all 50 states.
               State rates are sourced from each state&apos;s Department of Revenue or equivalent agency.
             </p>
             <p>

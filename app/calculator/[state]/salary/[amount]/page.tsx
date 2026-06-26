@@ -182,7 +182,7 @@ export default function SalaryPage({ params }: Props) {
               ? <><strong>{fmt(r.annualStateTax)}</strong> in {st.name} state income tax (effective rate {(r.effectiveStateRate * 100).toFixed(1)}%), </>
               : <>{st.name} has no state income tax, </>
             }
-            <strong>{fmt(r.annualSocialSecurity)}</strong> in Social Security (6.2% up to $176,100), and{' '}
+            <strong>{fmt(r.annualSocialSecurity)}</strong> in Social Security (6.2% up to $184,500), and{' '}
             <strong>{fmt(r.annualMedicare)}</strong> in Medicare (1.45%).
             {hasSdi && (
               <> Additional {st.name} payroll taxes ({r.additionalTaxDetails.map(t => t.shortName).join(', ')}) total <strong>{fmt(r.annualAdditionalTaxes)}</strong>.</>
@@ -257,7 +257,7 @@ export default function SalaryPage({ params }: Props) {
                 <tr>
                   <td className="px-4 py-3 text-gray-700">Social Security (6.2%)</td>
                   <td className="px-4 py-3 text-right text-gray-900">{fmt(r.annualSocialSecurity)}</td>
-                  <td className="px-4 py-3 text-right text-gray-500">{amount > 176100 ? `${(10927 / amount * 100).toFixed(2)}%` : '6.20%'}</td>
+                  <td className="px-4 py-3 text-right text-gray-500">{amount > 184500 ? `${(11439 / amount * 100).toFixed(2)}%` : '6.20%'}</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-gray-700">Medicare (1.45%)</td>

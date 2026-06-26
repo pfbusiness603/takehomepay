@@ -17,11 +17,11 @@ const FAQS = [
   },
   {
     q: 'Does this calculator use 2026 tax rates?',
-    a: 'Yes. This calculator uses the 2026 federal income tax brackets and FICA rates. The Social Security wage cap is $176,100 for 2026. State tax rates reflect the latest available rates.',
+    a: 'Yes. This calculator uses the 2026 federal income tax brackets and FICA rates. The Social Security wage cap is $184,500 for 2026. State tax rates reflect the latest available rates.',
   },
   {
     q: 'What is FICA?',
-    a: 'FICA taxes fund Social Security and Medicare. Employees pay 6.2% for Social Security (on wages up to $176,100) and 1.45% for Medicare on all wages.',
+    a: 'FICA taxes fund Social Security and Medicare. Employees pay 6.2% for Social Security (on wages up to $184,500) and 1.45% for Medicare on all wages.',
   },
   {
     q: 'How do pre-tax deductions reduce my taxes?',

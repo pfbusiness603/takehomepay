@@ -67,7 +67,7 @@ export const FEDERAL_BRACKETS: { single: TaxBracket[]; married: TaxBracket[] } =
 
 export const FICA = {
   socialSecurityRate: 0.062,
-  socialSecurityWageCap: 176_100,
+  socialSecurityWageCap: 184_500,
   medicareRate: 0.0145,
   additionalMedicareRate: 0.009,
   additionalMedicareThreshold: {
@@ -179,7 +179,7 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     personalExemption: NO_EXEMPTION,
     additionalTaxes: [
       // FAMLI: employee pays 50% of 0.9% — source: CDLE 2026
-      { name: 'CO FAMLI', shortName: 'FAMLI', rate: 0.0045, wageCap: 176_100 },
+      { name: 'CO FAMLI', shortName: 'FAMLI', rate: 0.0045, wageCap: 184_500 },
     ],
   },
   CT: {
@@ -208,7 +208,7 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     personalExemption: { single: 15_000, married: 24_000 },
     additionalTaxes: [
       // PFML: 0.5% up to SS wage base — source: CT PFML Authority 2026
-      { name: 'CT Paid Family Leave', shortName: 'PFML', rate: 0.005, wageCap: 176_100 },
+      { name: 'CT Paid Family Leave', shortName: 'PFML', rate: 0.005, wageCap: 184_500 },
     ],
   },
   DE: {
@@ -402,7 +402,7 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     personalExemption: { single: 4_400, married: 8_800 },
     additionalTaxes: [
       // PFML: employee share ~0.46% up to SS wage base — source: MA DFML 2026
-      { name: 'MA Paid Family Leave', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
+      { name: 'MA Paid Family Leave', shortName: 'PFML', rate: 0.0046, wageCap: 184_500 },
     ],
   },
   MI: {
@@ -681,7 +681,7 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     personalExemption: { single: 236, married: 472 },
     additionalTaxes: [
       // Paid Leave Oregon: employee pays 60% of 1% = 0.6% up to SS cap — source: OED 2026
-      { name: 'Oregon Paid Leave', shortName: 'PFML', rate: 0.006, wageCap: 176_100 },
+      { name: 'Oregon Paid Leave', shortName: 'PFML', rate: 0.006, wageCap: 184_500 },
     ],
   },
   PA: {
@@ -797,7 +797,7 @@ export const STATE_TAX_CONFIGS: Record<string, StateTaxConfig> = {
     personalExemption: NO_EXEMPTION,
     additionalTaxes: [
       // PFML: 0.46% up to SS wage base — source: WA ESD 2026
-      { name: 'WA PFML', shortName: 'PFML', rate: 0.0046, wageCap: 176_100 },
+      { name: 'WA PFML', shortName: 'PFML', rate: 0.0046, wageCap: 184_500 },
       // WA Cares Fund (long-term care): 0.58%, no wage cap — source: WA DCYF 2026
       { name: 'WA Cares Fund', shortName: 'WA Cares', rate: 0.0058 },
     ],

@@ -143,7 +143,7 @@ export default function HowWeCalculatePage() {
             <div className="bg-gray-50 rounded-xl p-4 my-3 space-y-1.5 text-xs font-mono text-gray-700">
               <p>SE tax base: net income × 92.35%</p>
               <p>  (the 0.9235 factor accounts for the deductible employer half)</p>
-              <p>Social Security: 12.4% on SE base up to $176,100</p>
+              <p>Social Security: 12.4% on SE base up to $184,500</p>
               <p>Medicare: 2.9% on all SE base</p>
               <p>Combined SE tax rate: 15.3%</p>
               <p>Deduction: half of SE tax is deductible from federal income</p>
@@ -176,7 +176,7 @@ export default function HowWeCalculatePage() {
               {[
                 'Federal brackets: IRS Rev. Proc. 2025 estimates with ~2.8% inflation adjustment for 2026',
                 'FICA rates: IRS Publication 15 (Circular E) for 2026',
-                'Social Security wage cap: $176,100 for 2026 (confirmed by SSA)',
+                'Social Security wage cap: $184,500 for 2026 (confirmed by SSA)',
                 'State income tax rates: sourced from each state\'s Department of Revenue or official tax authority',
                 'State standard deductions and exemptions: same official state sources, updated annually',
               ].map((item) => (
